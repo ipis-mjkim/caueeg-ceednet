@@ -1,0 +1,7 @@
+defaults:
+  - base_model
+  - 2D-VGG-Base
+  - _self_
+
+model: 2D-VGG-16
+minibatch_3090: 256

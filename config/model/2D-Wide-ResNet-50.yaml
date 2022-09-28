@@ -1,0 +1,10 @@
+defaults:
+  - base_model
+  - 2D-ResNet-Base
+  - _self_
+
+model: 2D-Wide-ResNet-50
+conv_layers: [3, 4, 6, 3]
+block: bottleneck
+width_per_group: 128
+minibatch_3090: 128

@@ -1,0 +1,9 @@
+defaults:
+  - base_model
+  - 2D-ResNet-Base
+  - _self_
+
+model: 2D-ResNet-50
+conv_layers: [3, 4, 6, 3]
+block: bottleneck
+minibatch_3090: 48

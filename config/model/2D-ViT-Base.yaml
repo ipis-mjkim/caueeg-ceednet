@@ -1,0 +1,13 @@
+defaults:
+  - base_model
+  - _self_
+
+_target_: ???
+model: ???
+seq_len_2d: ???
+use_age: conv
+fc_stages: 2
+dropout: 0.1
+attention_dropout: 0.1
+activation: gelu
+clip_grad_norm: 1.0

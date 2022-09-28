@@ -1,0 +1,12 @@
+defaults:
+  - base_model
+  - _self_
+
+_target_: models.vgg_1d.VGG1D
+model: ???
+# seq_length: ???
+use_age: fc
+fc_stages: 3
+dropout: 0.3  # 0.5 for the default VGG initializer
+batch_norm: true
+activation: mish  # relu for the original

@@ -1,0 +1,12 @@
+defaults:
+  - base_model
+  - _self_
+
+_target_: models.vgg_2d.VGG2D
+model: ???
+seq_len_2d: ???
+use_age: fc
+fc_stages: 3
+dropout: 0.3  # 0.5 for the original implementation (applied only to FC layers)
+batch_norm: true
+activation: mish  # relu for the original

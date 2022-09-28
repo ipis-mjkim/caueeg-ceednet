@@ -1,0 +1,9 @@
+defaults:
+  - base_model
+  - 2D-ResNet-Base
+  - _self_
+
+model: 2D-ResNet-18
+conv_layers: [2, 2, 2, 2]
+block: basic
+minibatch_3090: 256

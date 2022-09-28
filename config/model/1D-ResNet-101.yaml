@@ -1,0 +1,9 @@
+defaults:
+  - base_model
+  - 1D-ResNet-Base
+  - _self_
+
+model: 1D-ResNet-101
+conv_layers: [3, 4, 23, 3]
+block: bottleneck
+minibatch_3090: 320

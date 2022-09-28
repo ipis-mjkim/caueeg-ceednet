@@ -1,0 +1,12 @@
+defaults:
+  - base_model
+  - _self_
+
+_target_: models.cnn_transformer.CNNTransformer
+model: 1D-CNN-Transformer
+# seq_length: ???
+use_age: conv
+dropout: 0.1
+fc_stages: 4
+activation: mish
+minibatch_3090: 128

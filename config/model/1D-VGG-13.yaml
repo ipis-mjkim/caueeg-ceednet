@@ -1,0 +1,7 @@
+defaults:
+  - base_model
+  - 1D-VGG-Base
+  - _self_
+
+model: 1D-VGG-13
+minibatch_3090: 512

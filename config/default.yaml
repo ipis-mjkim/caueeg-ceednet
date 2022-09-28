@@ -1,0 +1,10 @@
+defaults:
+  - data: base_caueeg
+  - train: base_train
+  - model: base_model
+  - optional sweep: optional
+  - _self_
+
+hydra:
+  run:
+    dir: local/hydra/${now:%Y-%m-%d}/${now:%H-%M-%S}

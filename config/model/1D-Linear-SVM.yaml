@@ -1,0 +1,10 @@
+defaults:
+  - base_model
+  - _self_
+
+_target_: models.linear_classifier.LinearClassifier
+model: 1D-Linear-SVM
+use_age: fc
+minibatch_3090: 512
+dropout: 0.1
+criterion: svm

@@ -1,0 +1,11 @@
+defaults:
+  - base_model
+  - 1D-ResNet-Base
+  - _self_
+
+model: 1D-ResNeXt-50
+conv_layers: [3, 4, 6, 3]
+block: bottleneck
+groups: 32
+width_per_group: 4
+minibatch_3090: 512

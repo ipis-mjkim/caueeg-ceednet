@@ -1,0 +1,13 @@
+pandas
+pyarrow
+scipy
+sklearn
+matplotlib
+jupyterlab
+hydra-core==1.1
+omegaconf
+pyedflib==0.1.22
+tqdm
+wandb
+plotly
+ipywidgets

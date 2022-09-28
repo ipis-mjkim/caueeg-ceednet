@@ -1,0 +1,17 @@
+/local/
+
+**/.ipynb_checkpoints/
+
+**/__pycache__/
+
+/.vscode/
+
+/.idea/
+
+/runs/
+
+/output/
+
+/wandb/
+
+*.pyc
