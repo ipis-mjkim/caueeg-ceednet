@@ -30,7 +30,9 @@ This repository is the official implementation of "Deep learning-based EEG analy
 |            CEEDNet (ViT-B-16)            |  90.1M  |       343.6      |  ✔  |        47.31       |     66.18%    | [gjkysllw](https://drive.google.com/file/d/1ZTdU0mtMjqVvBw3tXpc-_R2GR9PhSNl6/view?usp=sharing) | [gjkysllw](http://naver.me/x6UXopG9) |
 |            CEEDNet (Ensemble)            |  256.7M |       981.1      |  ✔  |        22.74       |     74.66%    |                                                                                                |                                      |
 
-<img src="figure/dementia-roc-curve.jpg" alt="dementia-roc-curve" width="75%"/>
+<img src="figure/dementia-roc-curve.jpg" alt="dementia-roc-curve" width="80%"/>
+<img src="figure/dementia-confusion.jpg" alt="dementia-confusion-matrix" width="35%"/>
+<img src="figure/dementia-class-wise-metrics.jpg" alt="dementia-class-wise-metrics" width="55%"/>
 
 ### *CAUEEG-Abnormal* benchmark
 
@@ -52,7 +54,9 @@ This repository is the official implementation of "Deep learning-based EEG analy
 |            CEEDNet (ViT-B-16)            |  86.9M  |       331.6      |  ✔  |        63.99       |     72.70%    | [1cdws3t5](https://drive.google.com/file/d/1OT-xOTJ2kSqYWOG0KWQ6PeSPYWdX52Lo/view?usp=sharing) | [1cdws3t5](http://naver.me/xkqoPaor) |
 |            CEEDNet (Ensemble)            |  253.8M |       969.9      |  ✔  |        26.40       |     79.16%    |                                                                                                |                                      |
 
-<img src="figure/abnormal-roc-curve.jpg" alt="abnormal-roc-curve" width="75%"/>
+<img src="figure/abnormal-roc-curve.jpg" alt="abnormal-roc-curve" width="80%"/>
+<img src="figure/abnormal-confusion.jpg" alt="abnormal-confusion-matrix" width="25%"/>
+<img src="figure/abnormal-class-wise-metrics.jpg" alt="abnormal-class-wise-metrics" width="55%"/>
 
 ---
 
