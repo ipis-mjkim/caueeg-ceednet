@@ -128,14 +128,14 @@ Or, you can use [this Jupyter notebook](notebook/02_Train.ipynb).
 Thanks to [Hydra](https://hydra.cc/) support, the model, hyperparameters, and other training details are easily tuned using or modifying config files.
 
 ```bash
-python run_train.py data=task-dementia model=2D-VGG-19 train=base_train
+python run_train.py data=caueeg-dementia model=2D-VGG-19 train=base_train
 ```
 
 For speed-up, we recommend using the `PyArrow.feather` file format than using directly `EDF`, which can be done:
 
 ```bash
 python ./datasets/convert_file_format.py  # it takes a few minutes
-python run_train.py data=task-dementia model=2D-VGG-19 train=base_train ++data.file_format=feather
+python run_train.py data=caueeg-dementia model=2D-VGG-19 train=base_train ++data.file_format=feather
 ```
 
 ### Evaluation
