@@ -2,7 +2,7 @@
 
 **CEEDNet**: **C**AU**E**EG **E**nd-to-end **D**eep neural **Net**work for automatic early detection of dementia based on the CAUEEG dataset.
 
-This repository is the official implementation of "Deep learning-based EEG analysis to classify mild cognitive impairment for early detection of dementia: algorithms and benchmarks."
+This repository is the official implementation of "Deep learning-based EEG analysis to classify mild cognitive impairment for early detection of dementia: algorithms and benchmarks" from the CNIR (CAU NeuroImaging Research) team.
 
 ![graphical-abstract](figure/graphical-abstract.jpg)
 
