@@ -11,3 +11,4 @@ tqdm
 wandb
 plotly
 ipywidgets
+PySoundFile
