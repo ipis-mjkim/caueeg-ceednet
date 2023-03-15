@@ -89,7 +89,7 @@ def load_caueeg_task_datasets(dataset_path: str, task: str,
         The PyTorch dataset instances for the train, validation, and test sets for the task and their configurations.
     """
     task = task.lower()
-    if task not in ['abnormal', 'dementia']:
+    if task not in ['abnormal', 'dementia', 'abnormal-no-overlap', 'dementia-no-overlap']:
         raise ValueError(f"load_caueeg_task_datasets(task) receives the invalid task name: {task}. "
                          f"Make sure the task name is correct.")
 
@@ -158,7 +158,7 @@ def load_caueeg_task_split(dataset_path: str, task: str, split: str,
         A PyTorch dataset instance for the specified split for the task and their configurations.
     """
     task = task.lower()
-    if task not in ['dementia', 'abnormal']:
+    if task not in ['abnormal', 'dementia', 'abnormal-no-overlap', 'dementia-no-overlap']:
         raise ValueError(f"load_caueeg_task_split(task) receives the invalid task name: {task}. "
                          f"Make sure the task name is correct.")
 
