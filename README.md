@@ -148,7 +148,7 @@ To use the pre-trained model, download the checkpoint file from [here](#model-su
 
 ## Citation
 
-If you found this dataset helpful, please cite the paper below.
+If you found this repository helpful, please cite the paper below.
 
 ```bib
 An academic paper will be upcoming soon.
