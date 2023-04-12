@@ -35,6 +35,12 @@ def check_device_env(config):
             config['minibatch'] = config['minibatch_3090'] // 4
         elif '1070' in device_name:
             config['minibatch'] = config['minibatch_3090'] // 4
+        else:
+            config['minibatch'] = config['minibatch_3090']
+            print('*' * 150)
+            print(f"- WARNING: this process set the minibatch size as {config['minibatch']}, assuming that your VRAM size of GPU is equivalent to NVIDIA RTX 3090.")
+            print(f"- If you want to change the minibatch size, add '++minibatch=MINIBACH_SIZE' option to the command.")
+            print('*' * 150)
 
     # distributed training
     if config.get('ddp', False):

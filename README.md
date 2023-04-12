@@ -125,6 +125,16 @@ python run_train.py data=caueeg-abnormal model=1D-ResNet-18 train=base_train
 
 Or, you can use [this Jupyter notebook](notebook/02_Train.ipynb).
 
+If you encounter a GPU memory allocation error or wish to adjust the balance between memory usage and training speed, you can specify the minibatch size by adding the `++model.minibatch=INTEGER_NUMBER` option to the command as shown below:
+
+```bash
+python run_train.py data=caueeg-dementia model=1D-ResNet-18 train=base_train ++model.minibatch=32
+```
+
+```bash
+python run_train.py data=caueeg-abnormal model=1D-ResNet-18 train=base_train ++model.minibatch=32
+```
+
 Thanks to [Hydra](https://hydra.cc/) support, the model, hyperparameters, and other training details are easily tuned using or modifying config files.
 
 ```bash
