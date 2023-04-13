@@ -10,7 +10,7 @@ This repository is the official implementation of "[Deep learning-based EEG anal
 
 ## Model summary
 
-### *CAUEEG-Dementia* benchmark
+### *CAUEEG-Dementia* dataset
 
 |                   Model                  | #Params | Model size (MiB) | TTA | Throughput (EEG/s) | Test accuracy |                                             Link 1                                             |                Link 2                |
 |:----------------------------------------:|:-------:|:----------------:|:---:|:------------------:|:-------------:|:----------------------------------------------------------------------------------------------:|:------------------------------------:|
@@ -34,7 +34,7 @@ This repository is the official implementation of "[Deep learning-based EEG anal
 <img src="figure/dementia-confusion.jpg" alt="dementia-confusion-matrix" width="35%"/>
 <img src="figure/dementia-class-wise-metrics.jpg" alt="dementia-class-wise-metrics" width="55%"/>
 
-### *CAUEEG-Abnormal* benchmark
+### *CAUEEG-Abnormal* dataset
 
 |                   Model                  | #Params | Model size (MiB) | TTA | Throughput (EEG/s) | Test accuracy |                                             Link 1                                             |                Link 2                |
 |:----------------------------------------:|:-------:|:----------------:|:---:|:------------------:|:-------------:|:----------------------------------------------------------------------------------------------:|:------------------------------------:|
