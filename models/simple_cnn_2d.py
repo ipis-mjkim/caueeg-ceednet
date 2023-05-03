@@ -7,12 +7,21 @@ from .activation import get_activation_functional
 
 
 class IeracitanoCNN(nn.Module):
-    def __init__(self, in_channels: int, out_dims: int, fc_stages: int, seq_length: int,
-                 use_age: str, base_channels: int = 16,
-                 base_pool: str = 'max', activation: str = 'relu', **kwargs):
+    def __init__(
+        self,
+        in_channels: int,
+        out_dims: int,
+        fc_stages: int,
+        seq_length: int,
+        use_age: str,
+        base_channels: int = 16,
+        base_pool: str = "max",
+        activation: str = "relu",
+        **kwargs,
+    ):
         super().__init__()
 
-        if use_age != 'no':
+        if use_age != "no":
             raise ValueError(f"{self.__class__.__name__}.__init__(use_age) accepts for only 'no'.")
 
         if fc_stages != 1:
@@ -24,9 +33,9 @@ class IeracitanoCNN(nn.Module):
         self.nn_act = get_activation_class(activation, class_name=self.__class__.__name__)
         self.F_act = get_activation_functional(activation, class_name=self.__class__.__name__)
 
-        if base_pool == 'average':
+        if base_pool == "average":
             self.base_pool = nn.AvgPool2d
-        elif base_pool == 'max':
+        elif base_pool == "max":
             self.base_pool = nn.MaxPool2d
 
         self.conv1 = nn.Conv2d(1, base_channels, kernel_size=(3, 3), padding=(1, 1), stride=(1, 1), bias=True)
@@ -49,7 +58,7 @@ class IeracitanoCNN(nn.Module):
 
     def reset_weights(self):
         for m in self.modules():
-            if hasattr(m, 'reset_parameters'):
+            if hasattr(m, "reset_parameters"):
                 m.reset_parameters()
 
     def get_output_length(self):
@@ -76,8 +85,10 @@ class IeracitanoCNN(nn.Module):
             x = self.fc_stage(x)
         else:
             if target_from_last > self.fc_stages:
-                raise ValueError(f"{self.__class__.__name__}.compute_feature_embedding(target_from_last) receives "
-                                 f"an integer equal to or smaller than fc_stages={self.fc_stages}.")
+                raise ValueError(
+                    f"{self.__class__.__name__}.compute_feature_embedding(target_from_last) receives "
+                    f"an integer equal to or smaller than fc_stages={self.fc_stages}."
+                )
 
             for l in range(self.fc_stages - target_from_last):
                 x = self.fc_stage[l](x)

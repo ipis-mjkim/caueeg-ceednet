@@ -15,74 +15,101 @@ from .activation import get_activation_class
 
 
 vgg_layer_cfgs: Dict[str, List[Dict[str, int]]] = {
-    "2D-VGG-11": [{'layers': 1, 'channel_mul': 1},
-                  {'layers': 1, 'channel_mul': 2},
-                  {'layers': 2, 'channel_mul': 4},
-                  {'layers': 2, 'channel_mul': 8},
-                  {'layers': 2, 'channel_mul': 8}],
-    "2D-VGG-13": [{'layers': 2, 'channel_mul': 1},
-                  {'layers': 2, 'channel_mul': 2},
-                  {'layers': 2, 'channel_mul': 4},
-                  {'layers': 2, 'channel_mul': 8},
-                  {'layers': 2, 'channel_mul': 8}],
-    "2D-VGG-16": [{'layers': 2, 'channel_mul': 1},
-                  {'layers': 2, 'channel_mul': 2},
-                  {'layers': 3, 'channel_mul': 4},
-                  {'layers': 3, 'channel_mul': 8},
-                  {'layers': 3, 'channel_mul': 8}],
-    "2D-VGG-19": [{'layers': 2, 'channel_mul': 1},
-                  {'layers': 2, 'channel_mul': 2},
-                  {'layers': 4, 'channel_mul': 4},
-                  {'layers': 4, 'channel_mul': 8},
-                  {'layers': 4, 'channel_mul': 8}],
+    "2D-VGG-11": [
+        {"layers": 1, "channel_mul": 1},
+        {"layers": 1, "channel_mul": 2},
+        {"layers": 2, "channel_mul": 4},
+        {"layers": 2, "channel_mul": 8},
+        {"layers": 2, "channel_mul": 8},
+    ],
+    "2D-VGG-13": [
+        {"layers": 2, "channel_mul": 1},
+        {"layers": 2, "channel_mul": 2},
+        {"layers": 2, "channel_mul": 4},
+        {"layers": 2, "channel_mul": 8},
+        {"layers": 2, "channel_mul": 8},
+    ],
+    "2D-VGG-16": [
+        {"layers": 2, "channel_mul": 1},
+        {"layers": 2, "channel_mul": 2},
+        {"layers": 3, "channel_mul": 4},
+        {"layers": 3, "channel_mul": 8},
+        {"layers": 3, "channel_mul": 8},
+    ],
+    "2D-VGG-19": [
+        {"layers": 2, "channel_mul": 1},
+        {"layers": 2, "channel_mul": 2},
+        {"layers": 4, "channel_mul": 4},
+        {"layers": 4, "channel_mul": 8},
+        {"layers": 4, "channel_mul": 8},
+    ],
 }
 
 
 class VGG2D(nn.Module):
-    def __init__(self, model: str, in_channels: int, out_dims: int, seq_len_2d: Tuple[int], use_age: str,
-                 base_channels: int = 64, dropout: float = 0.5, batch_norm: bool = False, fc_stages: int = 2,
-                 base_pool: str = 'max', final_pool: str = 'average', activation: str = 'relu', **kwargs):
+    def __init__(
+        self,
+        model: str,
+        in_channels: int,
+        out_dims: int,
+        seq_len_2d: Tuple[int],
+        use_age: str,
+        base_channels: int = 64,
+        dropout: float = 0.5,
+        batch_norm: bool = False,
+        fc_stages: int = 2,
+        base_pool: str = "max",
+        final_pool: str = "average",
+        activation: str = "relu",
+        **kwargs,
+    ):
         super().__init__()
 
         if model not in vgg_layer_cfgs.keys():
-            raise ValueError(f"{self.__class__.__name__}.__init__(model) "
-                             f"receives one of [{vgg_layer_cfgs.keys()}].")
+            raise ValueError(
+                f"{self.__class__.__name__}.__init__(model) " f"receives one of [{vgg_layer_cfgs.keys()}]."
+            )
 
-        if use_age not in ['fc', 'conv', 'no']:
-            raise ValueError(f"{self.__class__.__name__}.__init__(use_age) "
-                             f"receives one of ['fc', 'conv', 'no'].")
+        if use_age not in ["fc", "conv", "no"]:
+            raise ValueError(f"{self.__class__.__name__}.__init__(use_age) " f"receives one of ['fc', 'conv', 'no'].")
 
-        if final_pool not in ['average', 'max'] or base_pool not in ['average', 'max']:
-            raise ValueError(f"{self.__class__.__name__}.__init__(final_pool, base_pool) both "
-                             f"receives one of ['average', 'max'].")
+        if final_pool not in ["average", "max"] or base_pool not in ["average", "max"]:
+            raise ValueError(
+                f"{self.__class__.__name__}.__init__(final_pool, base_pool) both "
+                f"receives one of ['average', 'max']."
+            )
 
         if fc_stages < 1:
-            raise ValueError(f"{self.__class__.__name__}.__init__(fc_stages) receives "
-                             f"an integer equal to ore more than 1.")
+            raise ValueError(
+                f"{self.__class__.__name__}.__init__(fc_stages) receives " f"an integer equal to ore more than 1."
+            )
 
         self.use_age = use_age
-        if self.use_age == 'conv':
+        if self.use_age == "conv":
             in_channels += 1
         self.fc_stages = fc_stages
 
         self.batch_norm = batch_norm
         self.nn_act = get_activation_class(activation, class_name=self.__class__.__name__)
 
-        if base_pool == 'average':
+        if base_pool == "average":
             self.base_pool = nn.AvgPool2d
-        elif base_pool == 'max':
+        elif base_pool == "max":
             self.base_pool = nn.MaxPool2d
 
         layer_cfgs = vgg_layer_cfgs[model]
         conv_filter_list = []
         for i in layer_cfgs:  # to prevent shallow copying
-            conv_filter_list.append({'kernel_size': 3})
+            conv_filter_list.append({"kernel_size": 3})
         self.seq_len_2d = seq_len_2d
-        self.output_length = program_conv_filters(sequence_length=min(seq_len_2d),
-                                                  conv_filter_list=conv_filter_list,
-                                                  output_lower_bound=4, output_upper_bound=8,
-                                                  stride_to_pool_ratio=1.5,
-                                                  class_name=self.__class__.__name__)
+        self.output_length = program_conv_filters(
+            sequence_length=min(seq_len_2d),
+            conv_filter_list=conv_filter_list,
+            output_lower_bound=4,
+            output_upper_bound=8,
+            stride_to_pool_ratio=1.5,
+            class_name=self.__class__.__name__,
+        )
 
         # convolution stage
         self.current_channels = in_channels
@@ -93,26 +120,30 @@ class VGG2D(nn.Module):
         self.conv_stage5 = self._make_conv_stage(conv_filter_list[4], layer_cfgs[4], base_channels)
 
         # pooling right before fully-connection
-        if final_pool == 'average':
+        if final_pool == "average":
             self.final_pool = nn.AdaptiveAvgPool2d((1, 1))
-        elif final_pool == 'max':
+        elif final_pool == "max":
             self.final_pool = nn.AdaptiveMaxPool2d((1, 1))
 
         # fully-connected stage
         fc_stage: List[nn.Module] = []
-        if self.use_age == 'fc':
+        if self.use_age == "fc":
             self.current_channels = self.current_channels + 1
 
         for i in range(fc_stages - 1):
             if self.batch_norm:
-                layer = nn.Sequential(nn.Linear(self.current_channels, self.current_channels // 2, bias=False),
-                                      nn.Dropout(p=dropout),
-                                      nn.BatchNorm1d(self.current_channels // 2),
-                                      self.nn_act())
+                layer = nn.Sequential(
+                    nn.Linear(self.current_channels, self.current_channels // 2, bias=False),
+                    nn.Dropout(p=dropout),
+                    nn.BatchNorm1d(self.current_channels // 2),
+                    self.nn_act(),
+                )
             else:
-                layer = nn.Sequential(nn.Linear(self.current_channels, self.current_channels // 2, bias=True),
-                                      nn.Dropout(p=dropout),
-                                      self.nn_act())
+                layer = nn.Sequential(
+                    nn.Linear(self.current_channels, self.current_channels // 2, bias=True),
+                    nn.Dropout(p=dropout),
+                    self.nn_act(),
+                )
             self.current_channels = self.current_channels // 2
             fc_stage.append(layer)
 
@@ -124,7 +155,7 @@ class VGG2D(nn.Module):
     def reset_weights(self):
         for m in self.modules():
             if isinstance(m, (nn.Conv1d, nn.Conv2d)):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
             elif isinstance(m, (nn.BatchNorm1d, nn.BatchNorm2d, nn.GroupNorm)):
@@ -134,38 +165,48 @@ class VGG2D(nn.Module):
                 nn.init.normal_(m.weight, 0, 0.01)
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
-            elif hasattr(m, 'reset_parameters'):
+            elif hasattr(m, "reset_parameters"):
                 m.reset_parameters()
 
     def _make_conv_stage(self, conv_filter, cfg, base_channels):
         conv_layers: List[nn.Module] = []
 
-        if conv_filter['pool'] > 1:
-            conv_layers += [self.base_pool(conv_filter['pool'])]
+        if conv_filter["pool"] > 1:
+            conv_layers += [self.base_pool(conv_filter["pool"])]
 
-        for k in range(cfg['layers']):
+        for k in range(cfg["layers"]):
             if k == 0:
-                stride = conv_filter['stride']
+                stride = conv_filter["stride"]
             else:
                 stride = 1
 
             if self.batch_norm:
-                conv_layers += [nn.Conv2d(in_channels=self.current_channels,
-                                          out_channels=cfg['channel_mul'] * base_channels,
-                                          kernel_size=conv_filter['kernel_size'],
-                                          padding=conv_filter['kernel_size'] // 2,
-                                          stride=stride, bias=False),
-                                nn.BatchNorm2d(cfg['channel_mul'] * base_channels),
-                                self.nn_act()]
+                conv_layers += [
+                    nn.Conv2d(
+                        in_channels=self.current_channels,
+                        out_channels=cfg["channel_mul"] * base_channels,
+                        kernel_size=conv_filter["kernel_size"],
+                        padding=conv_filter["kernel_size"] // 2,
+                        stride=stride,
+                        bias=False,
+                    ),
+                    nn.BatchNorm2d(cfg["channel_mul"] * base_channels),
+                    self.nn_act(),
+                ]
             else:
-                conv_layers += [nn.Conv2d(in_channels=self.current_channels,
-                                          out_channels=cfg['channel_mul'] * base_channels,
-                                          kernel_size=conv_filter['kernel_size'],
-                                          padding=conv_filter['kernel_size'] // 2,
-                                          stride=stride, bias=True),
-                                self.nn_act()]
+                conv_layers += [
+                    nn.Conv2d(
+                        in_channels=self.current_channels,
+                        out_channels=cfg["channel_mul"] * base_channels,
+                        kernel_size=conv_filter["kernel_size"],
+                        padding=conv_filter["kernel_size"] // 2,
+                        stride=stride,
+                        bias=True,
+                    ),
+                    self.nn_act(),
+                ]
 
-            self.current_channels = cfg['channel_mul'] * base_channels
+            self.current_channels = cfg["channel_mul"] * base_channels
         return nn.Sequential(*conv_layers)
 
     def get_output_length(self):
@@ -175,7 +216,7 @@ class VGG2D(nn.Module):
         return self.fc_stages
 
     def compute_feature_embedding(self, x, age, target_from_last: int = 0):
-        if self.use_age == 'conv':
+        if self.use_age == "conv":
             N, _, H, W = x.size()
             age = age.reshape((N, 1, 1, 1)).expand(N, 1, H, W)
             x = torch.cat((x, age), dim=1)
@@ -189,15 +230,17 @@ class VGG2D(nn.Module):
         x = self.final_pool(x)
         x = torch.flatten(x, 1)
 
-        if self.use_age == 'fc':
+        if self.use_age == "fc":
             x = torch.cat((x, age.reshape(-1, 1)), dim=1)
 
         if target_from_last == 0:
             x = self.fc_stage(x)
         else:
             if target_from_last > self.fc_stages:
-                raise ValueError(f"{self.__class__.__name__}.compute_feature_embedding(target_from_last) receives "
-                                 f"an integer equal to or smaller than fc_stages={self.fc_stages}.")
+                raise ValueError(
+                    f"{self.__class__.__name__}.compute_feature_embedding(target_from_last) receives "
+                    f"an integer equal to or smaller than fc_stages={self.fc_stages}."
+                )
 
             for l in range(self.fc_stages - target_from_last):
                 x = self.fc_stage[l](x)

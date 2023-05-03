@@ -18,7 +18,7 @@ class EegLimitMaxLength(object):
 
     def __call__(self, sample):
         sample['signal'] = sample['signal'][:, :self.max_length]
-        return sample
+        return sample 
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(max_length={self.max_length})"
