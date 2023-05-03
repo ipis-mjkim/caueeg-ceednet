@@ -151,7 +151,8 @@ def train_script(config, model, train_loader, val_loader, test_loader, multicrop
 
     # train and validation routine
     while i_step < config["iterations"]:
-        i_step += history_interval
+        i_step += history_interval * config.get('ddp_size', 1)
+        
         # train during 'history_interval' steps
         tr_ms = train_multistep if config.get('mixup', 0) < 1e-12 else train_mixup_multistep
         loss, train_acc = tr_ms(model=model, loader=train_loader, preprocess=preprocess_train,
